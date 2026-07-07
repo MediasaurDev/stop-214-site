@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stop 214 — Indie Games Studio</title>
-    <!-- Tailwind CSS for modern responsive utility styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for custom tech-focused gaming typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -19,47 +17,71 @@
         .font-tech {
             font-family: 'Space Grotesk', sans-serif;
         }
-        /* Custom neon glowing border effects */
         .card-glow:hover {
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.45);
             transform: translateY(-4px);
         }
+        .spotlight-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .spotlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200vh;
+            background: radial-gradient(ellipse 45% 100% at 50% -5%, rgba(255, 255, 255, 0.15) 0%, transparent 80%);
+            opacity: 0.8;
+            mix-blend-mode: screen;
+            transition: opacity 0.15s ease-in-out;
+        }
+        .grain-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
     </style>
 </head>
 <body class="text-zinc-300 min-h-screen relative overflow-x-hidden flex flex-col justify-between selection:bg-white selection:text-black">
 
-    <!-- Interactive Canvas Background (Floating Star System) -->
-    <canvas id="ambient-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
-    
-    <!-- Aesthetic Tech Overlays -->
+    <div class="grain-overlay"></div>
+
+    <div class="spotlight-wrapper">
+        <div id="main-spotlight" class="spotlight"></div>
+    </div>
+
+    <canvas id="ambient-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
     <div class="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-zinc-900/40 to-transparent pointer-events-none z-0"></div>
 
-    <!-- Main Content Wrapper -->
     <main class="w-full max-w-3xl mx-auto px-6 py-12 md:py-20 flex-grow flex flex-col justify-center relative z-10">
-        
-        <!-- TYPOGRAPHY HEADER MATCH: "Stop 214" & "games studio" styled with identical widths -->
         <div class="w-full flex flex-col items-center select-none mb-12">
             <div class="w-full max-w-lg">
-                <!-- Large Bold Heading -->
                 <h1 class="text-6xl sm:text-7xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none text-center font-tech">
                     STOP 214
                 </h1>
-                <!-- Spaced out Subtitle that spans exactly matching bounds via flex-justify -->
                 <div class="w-full flex justify-between text-xs sm:text-sm md:text-base font-bold text-zinc-400 tracking-widest uppercase mt-2 px-1 select-none font-tech">
                     <span>G</span><span>A</span><span>M</span><span>E</span><span>S</span>
-                    <span class="w-4"></span> <!-- Visual spacer -->
+                    <span class="w-4"></span>
                     <span>S</span><span>T</span><span>U</span><span>D</span><span>I</span><span>O</span>
                 </div>
             </div>
         </div>
 
-        <!-- Studio Statement / Pitch -->
         <div class="relative mb-16">
-            <!-- Left stylized border marker -->
             <div class="absolute -left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-white via-zinc-700 to-transparent rounded"></div>
             
-            <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">About Us</h2>
+            <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4 mb-8">
                 <strong class="text-white font-semibold">Stop 214</strong> is a brand-new indie games studio founded by Oliver Watkins and Daniel Dewfall, two recent graduates of the 
                 <a href="https://www.port.ac.uk/" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center text-white font-semibold hover:text-white underline decoration-zinc-600 hover:decoration-white underline-offset-4 transition-all duration-300">
                     University of Portsmouth
@@ -69,26 +91,25 @@
                 </a>. 
                 Our games will push to create short but sweet and immersive experiences that prioritize polish over profit. Follow our social media for the latest updates, and be sure to come back to see what we cook up.
             </p>
+
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">Why 214?</h2>
+            <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4">
+                The name <strong class="text-white font-semibold">Stop 214</strong> is a nickname for the Japanese fast-food joint where we first had a discussion about starting a studio together after seeing a new movie. This is considered the inception point for <strong class="text-white font-semibold">Stop 214</strong>. We believe that <strong class="text-white font-semibold">Stop 214</strong> is a place for you to sit down and reflect, and maybe learn something new about yourself.
+            </p>
         </div>
 
-        <!-- Founders Cards Grid -->
+        <div class="w-full mb-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white text-center font-tech">Our Team</h2>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-            
-            <!-- Oliver's Card -->
             <div class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
-                <!-- Futuristic corner aesthetic marks -->
                 <div class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl"></div>
                 <div class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl"></div>
 
-                <!-- Profile Headshot Box (Featuring elegant zoom and robust error fallback) -->
                 <div class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
-                    <!-- Subtle white-glow ambient gradient overlay -->
                     <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none"></div>
-                    
-                    <!-- Core Developer Profile Image -->
                     <img src="resources/oliver.png" alt="Oliver Watkins" class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10" onerror="this.style.display='none';">
-                    
-                    <!-- Dynamic Fallback Structure: Loaded if the custom image does not load -->
                     <div class="flex flex-col items-center justify-center w-full h-full">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -97,13 +118,10 @@
                     </div>
                 </div>
 
-                <!-- Bio / Link -->
                 <h3 class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">Oliver Watkins</h3>
                 <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-6 font-tech">Co-Founder & Developer</p>
                 
-                <!-- LinkedIn Connection Action -->
                 <a href="https://www.linkedin.com/in/oliverwatkinsdev/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                    <!-- SVG LinkedIn Logo -->
                     <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
@@ -111,21 +129,13 @@
                 </a>
             </div>
 
-            <!-- Daniel's Card -->
             <div class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
-                <!-- Futuristic corner aesthetic marks -->
                 <div class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl"></div>
                 <div class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl"></div>
 
-                <!-- Profile Headshot Box (Featuring elegant zoom and robust error fallback) -->
                 <div class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
-                    <!-- Subtle white-glow ambient gradient overlay -->
                     <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none"></div>
-                    
-                    <!-- Core Developer Profile Image -->
                     <img src="resources/daniel.jpeg" alt="Daniel Dewfall" class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10" onerror="this.style.display='none';">
-                    
-                    <!-- Dynamic Fallback Structure: Loaded if the custom image does not load -->
                     <div class="flex flex-col items-center justify-center w-full h-full">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -134,117 +144,154 @@
                     </div>
                 </div>
 
-                <!-- Bio / Link -->
                 <h3 class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">Daniel Dewfall</h3>
                 <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-6 font-tech">Co-Founder & Developer</p>
                 
-                <!-- LinkedIn Connection Action -->
                 <a href="https://www.linkedin.com/in/daniel-dewfall-5869a11a4/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                    <!-- SVG LinkedIn Logo -->
                     <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
                     <span>Connect on LinkedIn</span>
                 </a>
             </div>
+        </div>
 
+        <div class="w-full flex flex-col items-center mt-20 mb-4 relative z-20">
+            <a href="mailto:enquiries@stop214.com" class="inline-flex items-center justify-center py-4 px-8 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold text-lg hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-300 font-tech shadow-lg hover:shadow-zinc-700/20">
+                Got Questions? Email Us
+            </a>
+            <p class="mt-4 text-zinc-500 text-sm font-tech tracking-widest">enquiries@stop214.com</p>
         </div>
 
     </main>
 
-    <!-- Studio Footer -->
     <footer class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 border-t border-zinc-900/60 flex justify-center items-center text-xs text-zinc-500 font-tech">
-        <p class="text-center">&copy; 2026 Stop 214. All rights reserved.</p>
+        <p class="text-center">&copy; 2026 <strong>Stop 214</strong>. All rights reserved.</p>
     </footer>
 
     <script>
-        /* 1. AMBIENT INTERACTIVE CANVAS ENGINE */
         const canvas = document.getElementById('ambient-canvas');
         const ctx = canvas.getContext('2d');
+        const spotlight = document.getElementById('main-spotlight');
         let particles = [];
         let mouse = { x: null, y: null, radius: 150 };
+        let lastTime = 0;
 
-        // Handle Canvas Window Resize
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             initParticles();
         }
 
-        // Particle Blueprint
         class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.baseX = x;
-                this.baseY = y;
+            constructor() {
+                this.reset();
+                this.life = Math.random() * this.maxLife;
+            }
+
+            reset(x, y) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
                 this.size = Math.random() * 2 + 0.5;
-                this.density = (Math.random() * 30) + 15;
-                this.opacity = Math.random() * 0.4 + 0.1;
+                this.baseOpacity = Math.random() * 0.4 + 0.1;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.pushVx = 0;
+                this.pushVy = 0;
+                this.maxLife = (Math.random() * 4000) + 3000;
+                this.life = 0;
             }
 
             draw() {
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                let currentOpacity = 0;
+                const fadeTime = 800;
+
+                if (this.life < fadeTime) {
+                    currentOpacity = (this.life / fadeTime) * this.baseOpacity;
+                } else if (this.life > this.maxLife - fadeTime) {
+                    currentOpacity = ((this.maxLife - this.life) / fadeTime) * this.baseOpacity;
+                } else {
+                    currentOpacity = this.baseOpacity;
+                }
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, currentOpacity)})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.closePath();
                 ctx.fill();
             }
 
-            update() {
-                // Interactive mouse repulsion logic
+            update(dt) {
+                this.life += dt;
+                
+                if (this.life >= this.maxLife) {
+                    this.reset();
+                }
+
                 if (mouse.x !== null && mouse.y !== null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
+                    let dx = this.x - mouse.x;
+                    let dy = this.y - mouse.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     
                     if (distance < mouse.radius) {
-                        let forceDirectionX = dx / distance;
-                        let forceDirectionY = dy / distance;
-                        let maxDistance = mouse.radius;
-                        let force = (maxDistance - distance) / maxDistance;
-                        let directionX = forceDirectionX * force * this.density;
-                        let directionY = forceDirectionY * force * this.density;
-                        
-                        this.x -= directionX;
-                        this.y -= directionY;
-                    } else {
-                        // Drift back to original base coordinates
-                        if (this.x !== this.baseX) {
-                            let dx = this.x - this.baseX;
-                            this.x -= dx / 10;
-                        }
-                        if (this.y !== this.baseY) {
-                            let dy = this.y - this.baseY;
-                            this.y -= dy / 10;
-                        }
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        this.pushVx += (dx / distance) * force * 0.15;
+                        this.pushVy += (dy / distance) * force * 0.15;
                     }
                 }
+
+                this.pushVx *= 0.96;
+                this.pushVy *= 0.96;
+
+                this.x += this.vx + this.pushVx;
+                this.y += this.vy + this.pushVy;
+
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
             }
         }
 
-        // Initialize/Populate Particle Array based on viewport width
         function initParticles() {
             particles = [];
             let numberOfParticles = (canvas.width * canvas.height) / 11000;
             for (let i = 0; i < numberOfParticles; i++) {
-                let x = Math.random() * canvas.width;
-                let y = Math.random() * canvas.height;
-                particles.push(new Particle(x, y));
+                particles.push(new Particle());
             }
         }
 
-        // Smooth Animation Loop
-        function animate() {
+        function animate(currentTime) {
+            let dt = currentTime - lastTime;
+            lastTime = currentTime;
+            if (dt > 100) dt = 16; 
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particles.length; i++) {
                 particles[i].draw();
-                particles[i].update();
+                particles[i].update(dt);
             }
             requestAnimationFrame(animate);
         }
 
-        // Interactive Mouse Handlers
+        function flickerLight() {
+            if (Math.random() > 0.4) {
+                spotlight.style.opacity = (0.3 + Math.random() * 0.4).toString();
+                setTimeout(() => {
+                    spotlight.style.opacity = '0.8';
+                    if (Math.random() > 0.6) {
+                        setTimeout(() => {
+                            spotlight.style.opacity = (0.5 + Math.random() * 0.2).toString();
+                            setTimeout(() => {
+                                spotlight.style.opacity = '0.8';
+                            }, Math.random() * 100 + 50);
+                        }, Math.random() * 100 + 50);
+                    }
+                }, Math.random() * 300 + 100);
+            }
+            setTimeout(flickerLight, Math.random() * 4000 + 1500);
+        }
+
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.x;
             mouse.y = e.y;
@@ -267,10 +314,13 @@
             mouse.y = null;
         });
 
-        // Initialize Canvas on page load
         window.onload = function() {
             resizeCanvas();
-            animate();
+            requestAnimationFrame((time) => {
+                lastTime = time;
+                animate(time);
+            });
+            setTimeout(flickerLight, 2000);
         };
 
         window.addEventListener('resize', resizeCanvas);
