@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -22,6 +22,10 @@
             font-family: 'Space Grotesk', sans-serif;
         }
 
+        .card-glow {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         .card-glow:hover {
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.45);
@@ -30,12 +34,10 @@
 
         .spotlight-wrapper {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
         }
 
         .spotlight {
@@ -43,18 +45,26 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 200vh;
-            background: radial-gradient(ellipse 45% 100% at 50% -5%, rgba(255, 255, 255, 0.15) 0%, transparent 80%);
+            height: 150vh;
+            background: radial-gradient(ellipse 75% 100% at 50% -5%, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
             opacity: 0.8;
             mix-blend-mode: screen;
             transition: opacity 0.15s ease-in-out;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        html {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         .grain-overlay {
             position: fixed;
             inset: 0;
             z-index: 50;
-            /* Increased to 50 so it stays over the black fade mask */
             pointer-events: none;
             opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -65,7 +75,6 @@
             inset: 0;
             background-color: #050505;
             z-index: 40;
-            /* Above all content, but below the grain */
             pointer-events: none;
             animation: fadeOutMask 1s ease-in-out forwards;
         }
@@ -87,472 +96,432 @@
             }
         }
     </style>
-    </style>
 </head>
 
 <body
     class="text-zinc-300 min-h-screen relative overflow-x-hidden flex flex-col justify-between selection:bg-white selection:text-black">
 
-    <body
-        class="text-zinc-300 min-h-screen relative overflow-x-hidden flex flex-col justify-between selection:bg-white selection:text-black">
+    <div class="grain-overlay"></div>
+    <div class="load-mask"></div>
 
-        <body
-            class="text-zinc-300 min-h-screen relative overflow-x-hidden flex flex-col justify-between selection:bg-white selection:text-black">
+    <div class="spotlight-wrapper">
+        <div id="main-spotlight" class="spotlight"></div>
+    </div>
 
-            <div class="grain-overlay"></div>
-            <div class="load-mask"></div>
-            <div id="header-gleam"
-                class="fixed top-0 left-0 right-0 h-64 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-10">
+    <canvas id="ambient-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <main id="main-content"
+        class="w-full max-w-6xl mx-auto px-6 py-12 md:py-20 flex-grow flex flex-col justify-center relative z-10">
+
+        <div id="smear-track" class="absolute left-2 sm:left-0 bottom-0 w-[1px] bg-zinc-900 z-0"
+            style="clip-path: inset(0px -10px); transform: translateZ(0);">
+            <div id="scroll-smear"
+                class="absolute left-1/2 w-[3px] h-32 bg-gradient-to-b from-transparent via-white to-transparent rounded-full blur-[1px] opacity-90 top-0"
+                style="transform: translate3d(-50%, 0px, 0);"></div>
+        </div>
+
+        <div class="w-full flex flex-col items-center select-none mb-12 pl-4 sm:pl-8">
+            <div class="w-full max-w-lg">
+                <h1
+                    class="text-6xl sm:text-7xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none text-center font-tech">
+                    STOP 214
+                </h1>
+                <div
+                    class="w-full flex justify-between text-xs sm:text-sm md:text-base font-bold text-zinc-400 tracking-widest uppercase mt-2 px-1 select-none font-tech">
+                    <span>A</span><span></span><span>G</span><span>A</span><span>M</span><span>E</span><span>S</span>
+                    <span class="w-4"></span>
+                    <span>S</span><span>T</span><span>U</span><span>D</span><span>I</span><span>O</span>
+                </div>
             </div>
+        </div>
 
-            <div id="header-gleam"
-                class="fixed top-0 left-0 right-0 h-64 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-10">
-            </div>
+        <div class="relative mb-16 pl-4 sm:pl-8">
+            <h2 id="about-heading" class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">About Us</h2>
+            <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4 mb-8">
+                <strong class="text-white font-semibold">Stop 214</strong> is a brand-new indie games studio founded by
+                Oliver Watkins and Daniel Dewfall, two recent graduates of the
+                <a href="https://www.port.ac.uk/" target="_blank" rel="noopener noreferrer"
+                    class="group inline-block whitespace-nowrap text-white font-semibold hover:text-white underline decoration-zinc-600 hover:decoration-white underline-offset-4 transition-all duration-300">
+                    University of Portsmouth
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="inline-block h-4 w-4 ml-0.5 mb-1 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                </a>.
+                Our games will push to create short but sweet and immersive experiences that prioritize polish over
+                profit. Follow our social media for the latest updates, and be sure to come back to see what we cook up.
+            </p>
 
-            <div class="spotlight-wrapper">
-                <div id="main-spotlight" class="spotlight"></div>
-            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">Why 214?</h2>
+            <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4">
+                The name <strong class="text-white font-semibold">Stop 214</strong> originates from a Japanese fast-food
+                joint where we had our first discussion about starting a studio together after seeing a movie at the
+                cinema. This is considered the inception point for <strong class="text-white font-semibold">Stop
+                    214</strong>. We believe that <strong class="text-white font-semibold">Stop 214</strong> is a
+                non-tangible place for you to sit down and reflect, and maybe learn something new about yourself.
+            </p>
+        </div>
 
-            <canvas id="ambient-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+        <div class="w-full mb-8 pl-4 sm:pl-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white text-center font-tech">Meet The Team</h2>
+        </div>
 
-            <main id="main-content"
-                class="w-full max-w-6xl mx-auto px-6 py-12 md:py-20 flex-grow flex flex-col justify-center relative z-10">
-
-                <div id="smear-track" class="absolute left-2 sm:left-0 bottom-0 w-[1px] bg-zinc-900 z-0">
-                    <div id="scroll-smear"
-                        class="absolute left-1/2 w-[3px] h-32 bg-gradient-to-b from-transparent via-white to-transparent rounded-full blur-[1px] opacity-90 top-0 will-change-transform"
-                        style="transform: translate(-50%, 0px);"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full pl-4 sm:pl-8">
+            <div
+                class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center card-glow overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl">
                 </div>
 
-                <div class="w-full flex flex-col items-center select-none mb-12 pl-4 sm:pl-8">
-                    <div class="w-full max-w-lg">
-                        <h1
-                            class="text-6xl sm:text-7xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none text-center font-tech">
-                            STOP 214
-                        </h1>
-                        <div
-                            class="w-full flex justify-between text-xs sm:text-sm md:text-base font-bold text-zinc-400 tracking-widest uppercase mt-2 px-1 select-none font-tech">
-                            <span>A</span><span></span><span>G</span><span>A</span><span>M</span><span>E</span><span>S</span>
-                            <span class="w-4"></span>
-                            <span>S</span><span>T</span><span>U</span><span>D</span><span>I</span><span>O</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative mb-16 pl-4 sm:pl-8">
-                    <h2 id="about-heading" class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">About
-                        Us
-                    </h2>
-                    <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4 mb-8 text-justify">
-                        <strong class="text-white font-semibold">Stop 214</strong> is a brand-new indie games studio
-                        founded
-                        by
-                        Oliver Watkins and Daniel Dewfall, two recent graduates of the
-                        <a href="https://www.port.ac.uk/" target="_blank" rel="noopener noreferrer"
-                            class="group inline-flex items-center text-white font-semibold hover:text-white underline decoration-zinc-600 hover:decoration-white underline-offset-4 transition-all duration-300">
-                            University of Portsmouth
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                class="h-4 w-4 ml-1 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                        </a>.
-                        Our games will push to create short but sweet and immersive experiences that prioritize polish
-                        over
-                        profit. Follow our social media for the latest updates, and be sure to come back to see what we
-                        cook
-                        up.
-                    </p>
-
-                    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">Why 214?</h2>
-                    <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4 text-justify">
-                        The name <strong class="text-white font-semibold">Stop 214</strong> originates from a Japanese
-                        fast-food joint where we had our first discussion about starting a studio together after seeing
-                        a movie at the cinema. This is considered the inception point for <strong
-                            class="text-white font-semibold">Stop 214</strong>. We believe that <strong
-                            class="text-white font-semibold">Stop 214</strong> is
-                        a non-tangible place for you to sit down and reflect, and maybe learn something new about
-                        yourself.
-                    </p>
-                </div>
-
-                <div class="w-full mb-8 pl-4 sm:pl-8">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-white text-center font-tech">Meet The Team</h2>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full pl-4 sm:pl-8">
+                <div
+                    class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
                     <div
-                        class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
-                        <div
-                            class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl">
-                        </div>
-                        <div
-                            class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl">
-                        </div>
-
-                        <div
-                            class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none">
-                            </div>
-                            <img src="resources/oliver.png" alt="Oliver Watkins"
-                                class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10"
-                                onerror="this.style.display='none';">
-                            <div class="flex flex-col items-center justify-center w-full h-full">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                <span
-                                    class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">OW</span>
-                            </div>
-                        </div>
-
-                        <h3
-                            class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">
-                            Oliver Watkins</h3>
-                        <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-2 font-tech">Co-Founder &
-                            Designer
-                        </p>
-                        <a href="mailto:oliver@stop214.com"
-                            class="text-sm font-tech text-zinc-400 hover:text-white transition-colors mb-6">oliver@stop214.com</a>
-
-                        <div class="flex flex-col gap-3 w-full">
-                            <a href="https://www.linkedin.com/in/oliverwatkinsdev/" target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                                <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                                </svg>
-                                <span>Connect on LinkedIn</span>
-                            </a>
-                            <a href="https://mediasaur.itch.io/" target="_blank" rel="noopener noreferrer"
-                                class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                                <img src="https://www.svgrepo.com/show/341939/itch-io.svg" alt="Itch.io"
-                                    class="h-5 w-5 brightness-0 invert opacity-80">
-                                <span>Visit Itch.io</span>
-                            </a>
-                        </div>
+                        class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none">
                     </div>
+                    <img src="resources/oliver.png" alt="Oliver Watkins"
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10"
+                        onerror="this.style.display='none';">
+                    <div class="flex flex-col items-center justify-center w-full h-full">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span
+                            class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">OW</span>
+                    </div>
+                </div>
 
+                <h3
+                    class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">
+                    Oliver Watkins</h3>
+                <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-2 font-tech">Co-Founder & Designer</p>
+                <a href="mailto:oliver@stop214.com"
+                    class="text-sm font-tech text-zinc-400 hover:text-white transition-colors mb-6">oliver@stop214.com</a>
+
+                <div class="flex flex-col gap-3 w-full">
+                    <a href="https://www.linkedin.com/in/oliverwatkinsdev/" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        <span>Connect on LinkedIn</span>
+                    </a>
+                    <a href="https://mediasaur.itch.io/" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <img src="https://www.svgrepo.com/show/341939/itch-io.svg" alt="Itch.io"
+                            class="h-5 w-5 brightness-0 invert opacity-80">
+                        <span>Visit Itch.io</span>
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center card-glow overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl">
+                </div>
+
+                <div
+                    class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
                     <div
-                        class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
-                        <div
-                            class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl">
-                        </div>
-                        <div
-                            class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl">
-                        </div>
-
-                        <div
-                            class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none">
-                            </div>
-                            <img src="resources/daniel.jpeg" alt="Daniel Dewfall"
-                                class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10"
-                                onerror="this.style.display='none';">
-                            <div class="flex flex-col items-center justify-center w-full h-full">
-                                <svg xmlns="http://www.w3.org/2000/svg"
-                                    class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                <span
-                                    class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">DD</span>
-                            </div>
-                        </div>
-
-                        <h3
-                            class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">
-                            Daniel Dewfall</h3>
-                        <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-2 font-tech">Co-Founder &
-                            Designer
-                        </p>
-                        <a href="mailto:daniel@stop214.com"
-                            class="text-sm font-tech text-zinc-400 hover:text-white transition-colors mb-6">daniel@stop214.com</a>
-
-                        <div class="flex flex-col gap-3 w-full">
-                            <a href="https://www.linkedin.com/in/daniel-dewfall-5869a11a4/" target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                                <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                                </svg>
-                                <span>Connect on LinkedIn</span>
-                            </a>
-                            <a href="https://www.artstation.com/danieldewfall" target="_blank" rel="noopener noreferrer"
-                                class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                                <img src="https://www.svgrepo.com/show/341618/artstation.svg" alt="ArtStation"
-                                    class="h-5 w-5 brightness-0 invert opacity-80">
-                                <span>Visit ArtStation</span>
-                            </a>
-                        </div>
+                        class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none">
+                    </div>
+                    <img src="resources/daniel.jpeg" alt="Daniel Dewfall"
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10"
+                        onerror="this.style.display='none';">
+                    <div class="flex flex-col items-center justify-center w-full h-full">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <span
+                            class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">DD</span>
                     </div>
                 </div>
 
-                <div class="w-full flex flex-col items-center mt-24 mb-4 relative z-20 pl-4 sm:pl-8">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-white text-center font-tech mb-8">Got Questions? We
-                        Are
-                        All
-                        Ears</h2>
-                    <form action="https://formspree.io/f/mnjkyaba" method="POST"
-                        class="w-full max-w-lg flex flex-col gap-4">
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <input type="text" name="name" placeholder="Name" required
-                                class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-tech">
-                            <input type="email" name="email" placeholder="Email" required
-                                class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-tech">
-                        </div>
-                        <textarea name="message" placeholder="Message" rows="4" required
-                            class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-none font-tech"></textarea>
-                        <button type="submit"
-                            class="w-full py-4 mt-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold text-lg hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-300 font-tech shadow-lg hover:shadow-zinc-700/20">
-                            Send ✉️
-                        </button>
-                    </form>
-                    <p class="mt-8 text-zinc-500 text-sm font-tech tracking-widest text-center">enquiries@stop214.com
-                    </p>
+                <h3
+                    class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">
+                    Daniel Dewfall</h3>
+                <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-2 font-tech">Co-Founder & Designer</p>
+                <a href="mailto:daniel@stop214.com"
+                    class="text-sm font-tech text-zinc-400 hover:text-white transition-colors mb-6">daniel@stop214.com</a>
+
+                <div class="flex flex-col gap-3 w-full">
+                    <a href="https://www.linkedin.com/in/daniel-dewfall-5869a11a4/" target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        <span>Connect on LinkedIn</span>
+                    </a>
+                    <a href="https://www.artstation.com/danieldewfall" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <img src="https://www.svgrepo.com/show/341618/artstation.svg" alt="ArtStation"
+                            class="h-5 w-5 brightness-0 invert opacity-80">
+                        <span>Visit ArtStation</span>
+                    </a>
                 </div>
+            </div>
+        </div>
 
-            </main>
+        <div class="w-full flex flex-col items-center mt-24 mb-4 relative z-20 pl-4 sm:pl-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white text-center font-tech mb-8">Got Questions? We Are All
+                Ears</h2>
+            <form action="https://formspree.io/f/mnjkyaba" method="POST" class="w-full max-w-lg flex flex-col gap-4">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input type="text" name="name" placeholder="Name" required
+                        class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-tech">
+                    <input type="email" name="email" placeholder="Email" required
+                        class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-tech">
+                </div>
+                <textarea name="message" placeholder="Message" rows="4" required
+                    class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-none font-tech"></textarea>
+                <button type="submit"
+                    class="w-full py-4 mt-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold text-lg hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-300 font-tech shadow-lg hover:shadow-zinc-700/20">
+                    Send ✉️
+                </button>
+            </form>
+            <p class="mt-8 text-zinc-500 text-sm font-tech tracking-widest text-center">enquiries@stop214.com</p>
+        </div>
 
-            <footer
-                class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 border-t border-zinc-900/60 flex justify-center items-center text-xs text-zinc-500 font-tech">
-                <p class="text-center">&copy; 2026 <strong>Stop 214</strong>. All rights reserved.</p>
-            </footer>
+    </main>
 
-            <script>
-                const canvas = document.getElementById('ambient-canvas');
-                const ctx = canvas.getContext('2d');
-                const spotlight = document.getElementById('main-spotlight');
-                let particles = [];
-                let mouse = { x: null, y: null, radius: 150 };
-                let lastTime = 0;
-                let targetSmearY = 0;
-                let currentSmearY = 0;
+    <footer
+        class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 border-t border-zinc-900/60 flex justify-center items-center text-xs text-zinc-500 font-tech">
+        <p class="text-center">&copy; 2026 <strong>Stop 214</strong>. All rights reserved.</p>
+    </footer>
 
-                function resizeCanvas() {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                    initParticles();
-                }
+    <script>
+        const canvas = document.getElementById('ambient-canvas');
+        const ctx = canvas.getContext('2d');
+        const spotlight = document.getElementById('main-spotlight');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+        let lastTime = 0;
+        let targetSmearY = 0;
+        let currentSmearY = 0;
 
-                class Particle {
-                    constructor() {
-                        this.reset();
-                        this.life = Math.random() * this.maxLife;
-                    }
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        }
 
-                    reset(x, y) {
-                        this.x = x || Math.random() * canvas.width;
-                        this.y = y || Math.random() * canvas.height;
-                        this.size = Math.random() * 2 + 0.5;
-                        this.baseOpacity = Math.random() * 0.4 + 0.1;
-                        this.vx = (Math.random() - 0.5) * 0.5;
-                        this.vy = (Math.random() - 0.5) * 0.5;
-                        this.pushVx = 0;
-                        this.pushVy = 0;
-                        this.maxLife = (Math.random() * 4000) + 3000;
-                        this.life = 0;
-                    }
+        class Particle {
+            constructor() {
+                this.reset();
+                this.life = Math.random() * this.maxLife;
+            }
 
-                    draw() {
-                        let currentOpacity = 0;
-                        const fadeTime = 800;
+            reset(x, y) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.baseOpacity = Math.random() * 0.4 + 0.1;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.pushVx = 0;
+                this.pushVy = 0;
+                this.maxLife = (Math.random() * 4000) + 3000;
+                this.life = 0;
+            }
 
-                        if (this.life < fadeTime) {
-                            currentOpacity = (this.life / fadeTime) * this.baseOpacity;
-                        } else if (this.life > this.maxLife - fadeTime) {
-                            currentOpacity = ((this.maxLife - this.life) / fadeTime) * this.baseOpacity;
-                        } else {
-                            currentOpacity = this.baseOpacity;
-                        }
+            draw() {
+                let currentOpacity = 0;
+                const fadeTime = 800;
 
-                        let dx = this.x - (canvas.width / 2);
-                        let dy = this.y;
-                        let normalizedX = dx / (canvas.width * 0.45);
-                        let normalizedY = dy / (canvas.height * 1.5);
-                        let distanceToLight = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
-
-                        let lightBoost = 0;
-                        if (distanceToLight < 1) {
-                            let currentSpotlightOpacity = parseFloat(spotlight.style.opacity || 0.8);
-                            lightBoost = Math.pow((1 - distanceToLight), 2) * (currentSpotlightOpacity * 0.8);
-                        }
-
-                        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, currentOpacity + lightBoost))})`;
-                        ctx.beginPath();
-                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                        ctx.closePath();
-                        ctx.fill();
-                    }
-
-                    update(dt) {
-                        this.life += dt;
-
-                        if (this.life >= this.maxLife) {
-                            this.reset();
-                        }
-
-                        if (mouse.x !== null && mouse.y !== null) {
-                            let dx = this.x - mouse.x;
-                            let dy = this.y - mouse.y;
-                            let distance = Math.sqrt(dx * dx + dy * dy);
-
-                            if (distance < mouse.radius) {
-                                let force = (mouse.radius - distance) / mouse.radius;
-                                this.pushVx += (dx / distance) * force * 0.15;
-                                this.pushVy += (dy / distance) * force * 0.15;
-                            }
-                        }
-
-                        this.pushVx *= 0.96;
-                        this.pushVy *= 0.96;
-
-                        this.x += this.vx + this.pushVx;
-                        this.y += this.vy + this.pushVy;
-
-                        if (this.x < 0) this.x = canvas.width;
-                        if (this.x > canvas.width) this.x = 0;
-                        if (this.y < 0) this.y = canvas.height;
-                        if (this.y > canvas.height) this.y = 0;
-                    }
-                }
-
-                function initParticles() {
-                    particles = [];
-                    let numberOfParticles = (canvas.width * canvas.height) / 11000;
-                    for (let i = 0; i < numberOfParticles; i++) {
-                        particles.push(new Particle());
-                    }
-                }
-
-                function updateScrollEffects() {
-                    const gleam = document.getElementById('header-gleam');
-                    if (gleam) {
-                        const opacity = Math.max(0, 1 - (window.scrollY / 400));
-                        gleam.style.opacity = opacity.toString();
-                    }
-
-                    const track = document.getElementById('smear-track');
-                    const aboutHeading = document.getElementById('about-heading');
-                    const mainContent = document.getElementById('main-content');
-
-                    if (track && aboutHeading && mainContent) {
-                        const offset = aboutHeading.getBoundingClientRect().top - mainContent.getBoundingClientRect().top;
-                        track.style.top = `${Math.max(0, offset + 6)}px`;
-
-                        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-                        const scrollPercent = scrollHeight > 0 ? (window.scrollY / scrollHeight) : 0;
-                        const maxY = track.offsetHeight - 128;
-                        const rawY = scrollPercent * maxY;
-                        targetSmearY = rawY;
-                    }
-                }
-
-                function animate(currentTime) {
-                    let dt = currentTime - lastTime;
-                    lastTime = currentTime;
-                    if (dt > 100) dt = 16;
-
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    for (let i = 0; i < particles.length; i++) {
-                        particles[i].draw();
-                        particles[i].update(dt);
-                    }
-
-                    currentSmearY += (targetSmearY - currentSmearY) * 0.1;
-                    const smear = document.getElementById('scroll-smear');
-                    const track = document.getElementById('smear-track');
-
-                    if (smear && track) {
-                        smear.style.transform = `translate(-50%, ${currentSmearY}px)`;
-
-                        let maxY = track.offsetHeight - 128;
-                        let peakPercent = (currentSmearY / Math.max(1, maxY)) * 100;
-                        peakPercent = Math.max(0, Math.min(100, peakPercent));
-
-                        smear.style.backgroundImage = `linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) ${peakPercent}%, rgba(255, 255, 255, 0) 100%)`;
-                    }
-
-                    requestAnimationFrame(animate);
-                }
-
-                function flickerLight() {
-                    if (Math.random() > 0.4) {
-                        spotlight.style.opacity = (0.3 + Math.random() * 0.4).toString();
-                        setTimeout(() => {
-                            spotlight.style.opacity = '0.8';
-                            if (Math.random() > 0.6) {
-                                setTimeout(() => {
-                                    spotlight.style.opacity = (0.5 + Math.random() * 0.2).toString();
-                                    setTimeout(() => {
-                                        spotlight.style.opacity = '0.8';
-                                    }, Math.random() * 100 + 50);
-                                }, Math.random() * 100 + 50);
-                            }
-                        }, Math.random() * 300 + 100);
-                    }
-                    setTimeout(flickerLight, Math.random() * 4000 + 1500);
-                }
-
-                window.addEventListener('scroll', updateScrollEffects);
-
-                window.addEventListener('mousemove', (e) => {
-                    mouse.x = e.x;
-                    mouse.y = e.y;
-                });
-
-                window.addEventListener('mouseout', () => {
-                    mouse.x = null;
-                    mouse.y = null;
-                });
-
-                window.addEventListener('touchmove', (e) => {
-                    if (e.touches.length > 0) {
-                        mouse.x = e.touches[0].clientX;
-                        mouse.y = e.touches[0].clientY;
-                    }
-                });
-
-                window.addEventListener('touchend', () => {
-                    mouse.x = null;
-                    mouse.y = null;
-                });
-
-                function init() {
-                    resizeCanvas();
-                    updateScrollEffects();
-                    currentSmearY = targetSmearY;
-                    requestAnimationFrame((time) => {
-                        lastTime = time;
-                        animate(time);
-                    });
-                    setTimeout(flickerLight, 2000);
-                }
-
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', init);
+                if (this.life < fadeTime) {
+                    currentOpacity = (this.life / fadeTime) * this.baseOpacity;
+                } else if (this.life > this.maxLife - fadeTime) {
+                    currentOpacity = ((this.maxLife - this.life) / fadeTime) * this.baseOpacity;
                 } else {
-                    init();
+                    currentOpacity = this.baseOpacity;
                 }
 
-                window.addEventListener('load', updateScrollEffects);
+                let dx = this.x - (canvas.width / 2);
+                let dy = this.y;
+                let normalizedX = dx / (canvas.width * 0.45);
+                let normalizedY = dy / (canvas.height * 1.5);
+                let distanceToLight = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
 
-                window.addEventListener('resize', () => {
-                    resizeCanvas();
-                    updateScrollEffects();
-                });
-            </script>
-        </body>
+                let lightBoost = 0;
+                if (distanceToLight < 1) {
+                    let currentSpotlightOpacity = parseFloat(spotlight.style.opacity || 0.8);
+                    lightBoost = Math.pow((1 - distanceToLight), 2) * (currentSpotlightOpacity * 0.8);
+                }
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, currentOpacity + lightBoost))})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            update(dt) {
+                this.life += dt;
+
+                if (this.life >= this.maxLife) {
+                    this.reset();
+                }
+
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = this.x - mouse.x;
+                    let dy = this.y - mouse.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        this.pushVx += (dx / distance) * force * 0.15;
+                        this.pushVy += (dy / distance) * force * 0.15;
+                    }
+                }
+
+                this.pushVx *= 0.96;
+                this.pushVy *= 0.96;
+
+                this.x += this.vx + this.pushVx;
+                this.y += this.vy + this.pushVy;
+
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            let numberOfParticles = (canvas.width * canvas.height) / 11000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function updateScrollEffects() {
+            const track = document.getElementById('smear-track');
+            const aboutHeading = document.getElementById('about-heading');
+            const mainContent = document.getElementById('main-content');
+
+            if (track && aboutHeading && mainContent) {
+                const offset = aboutHeading.getBoundingClientRect().top - mainContent.getBoundingClientRect().top;
+                track.style.top = `${Math.max(0, offset + 6)}px`;
+
+                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = scrollHeight > 0 ? (window.scrollY / scrollHeight) : 0;
+                const maxY = track.offsetHeight - 128;
+                targetSmearY = scrollPercent * maxY;
+            }
+        }
+
+        function animate(currentTime) {
+            let dt = currentTime - lastTime;
+            lastTime = currentTime;
+            if (dt > 100) dt = 16;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].draw();
+                particles[i].update(dt);
+            }
+
+            currentSmearY += (targetSmearY - currentSmearY) * 0.1;
+            const smear = document.getElementById('scroll-smear');
+            const track = document.getElementById('smear-track');
+
+            if (smear && track) {
+                smear.style.transform = `translate3d(-50%, ${currentSmearY}px, 0)`;
+
+                let maxY = track.offsetHeight - 128;
+                let peakPercent = (currentSmearY / Math.max(1, maxY)) * 100;
+                peakPercent = Math.max(0, Math.min(100, peakPercent));
+
+                smear.style.backgroundImage = `linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) ${peakPercent}%, rgba(255, 255, 255, 0) 100%)`;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function flickerLight() {
+            if (Math.random() > 0.2) {
+                spotlight.style.opacity = (0.8 + Math.random() * 0.16).toString();
+                setTimeout(() => {
+                    spotlight.style.opacity = '0.96';
+                    if (Math.random() > 0.4) {
+                        setTimeout(() => {
+                            spotlight.style.opacity = (0.8 + Math.random() * 0.1).toString();
+                            setTimeout(() => {
+                                spotlight.style.opacity = '0.96';
+                            }, Math.random() * 80 + 30);
+                        }, Math.random() * 80 + 30);
+                    }
+                }, Math.random() * 200 + 50);
+            }
+            setTimeout(flickerLight, Math.random() * 2000 + 800);
+        }
+
+        window.addEventListener('scroll', updateScrollEffects);
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouse.x = e.touches[0].clientX;
+                mouse.y = e.touches[0].clientY;
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        function init() {
+            resizeCanvas();
+            updateScrollEffects();
+            currentSmearY = targetSmearY;
+            requestAnimationFrame((time) => {
+                lastTime = time;
+                animate(time);
+            });
+            setTimeout(flickerLight, 2000);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        window.addEventListener('load', updateScrollEffects);
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            updateScrollEffects();
+        });
+    </script>
+</body>
 
 </html>
