@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stop 214 — Indie Games Studio</title>
+    <title>Stop 214 Games</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #050505;
         }
+
         .font-tech {
             font-family: 'Space Grotesk', sans-serif;
         }
+
         .card-glow:hover {
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.45);
             transform: translateY(-4px);
         }
+
         .spotlight-wrapper {
             position: absolute;
             top: 0;
@@ -31,6 +37,7 @@
             pointer-events: none;
             z-index: 1;
         }
+
         .spotlight {
             position: absolute;
             top: 0;
@@ -42,6 +49,7 @@
             mix-blend-mode: screen;
             transition: opacity 0.15s ease-in-out;
         }
+
         .grain-overlay {
             position: fixed;
             inset: 0;
@@ -52,24 +60,39 @@
         }
     </style>
 </head>
-<body class="text-zinc-300 min-h-screen relative overflow-x-hidden flex flex-col justify-between selection:bg-white selection:text-black">
+
+<body
+    class="text-zinc-300 min-h-screen relative overflow-x-hidden flex flex-col justify-between selection:bg-white selection:text-black">
 
     <div class="grain-overlay"></div>
+
+    <div id="header-gleam"
+        class="fixed top-0 left-0 right-0 h-64 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-10">
+    </div>
 
     <div class="spotlight-wrapper">
         <div id="main-spotlight" class="spotlight"></div>
     </div>
 
     <canvas id="ambient-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
-    <div class="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-zinc-900/40 to-transparent pointer-events-none z-0"></div>
 
-    <main class="w-full max-w-3xl mx-auto px-6 py-12 md:py-20 flex-grow flex flex-col justify-center relative z-10">
-        <div class="w-full flex flex-col items-center select-none mb-12">
+    <main id="main-content"
+        class="w-full max-w-3xl mx-auto px-6 py-12 md:py-20 flex-grow flex flex-col justify-center relative z-10">
+
+        <div id="smear-track" class="absolute left-2 sm:left-0 bottom-0 w-[1px] bg-zinc-900 z-0">
+            <div id="scroll-smear"
+                class="absolute left-1/2 w-[3px] h-32 bg-gradient-to-b from-transparent via-white to-transparent rounded-full blur-[1px] opacity-90 top-0 will-change-transform"
+                style="transform: translate(-50%, 0px);"></div>
+        </div>
+
+        <div class="w-full flex flex-col items-center select-none mb-12 pl-4 sm:pl-8">
             <div class="w-full max-w-lg">
-                <h1 class="text-6xl sm:text-7xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none text-center font-tech">
+                <h1
+                    class="text-6xl sm:text-7xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none text-center font-tech">
                     STOP 214
                 </h1>
-                <div class="w-full flex justify-between text-xs sm:text-sm md:text-base font-bold text-zinc-400 tracking-widest uppercase mt-2 px-1 select-none font-tech">
+                <div
+                    class="w-full flex justify-between text-xs sm:text-sm md:text-base font-bold text-zinc-400 tracking-widest uppercase mt-2 px-1 select-none font-tech">
                     <span>G</span><span>A</span><span>M</span><span>E</span><span>S</span>
                     <span class="w-4"></span>
                     <span>S</span><span>T</span><span>U</span><span>D</span><span>I</span><span>O</span>
@@ -77,95 +100,174 @@
             </div>
         </div>
 
-        <div class="relative mb-16">
-            <div class="absolute -left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-white via-zinc-700 to-transparent rounded"></div>
-            
-            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">About Us</h2>
+        <div class="relative mb-16 pl-4 sm:pl-8">
+            <h2 id="about-heading" class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">About Us</h2>
             <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4 mb-8">
-                <strong class="text-white font-semibold">Stop 214</strong> is a brand-new indie games studio founded by Oliver Watkins and Daniel Dewfall, two recent graduates of the 
-                <a href="https://www.port.ac.uk/" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center text-white font-semibold hover:text-white underline decoration-zinc-600 hover:decoration-white underline-offset-4 transition-all duration-300">
+                <strong class="text-white font-semibold">Stop 214</strong> is a brand-new indie games studio founded by
+                Oliver Watkins and Daniel Dewfall, two recent graduates of the
+                <a href="https://www.port.ac.uk/" target="_blank" rel="noopener noreferrer"
+                    class="group inline-flex items-center text-white font-semibold hover:text-white underline decoration-zinc-600 hover:decoration-white underline-offset-4 transition-all duration-300">
                     University of Portsmouth
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4 ml-1 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
-                </a>. 
-                Our games will push to create short but sweet and immersive experiences that prioritize polish over profit. Follow our social media for the latest updates, and be sure to come back to see what we cook up.
+                </a>.
+                Our games will push to create short but sweet and immersive experiences that prioritize polish over
+                profit. Follow our social media for the latest updates, and be sure to come back to see what we cook up.
             </p>
 
             <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 pl-4 font-tech">Why 214?</h2>
             <p class="text-zinc-300 text-lg sm:text-xl leading-relaxed font-light pl-4">
-                The name <strong class="text-white font-semibold">Stop 214</strong> is a nickname for the Japanese fast-food joint where we first had a discussion about starting a studio together after seeing a new movie. This is considered the inception point for <strong class="text-white font-semibold">Stop 214</strong>. We believe that <strong class="text-white font-semibold">Stop 214</strong> is a place for you to sit down and reflect, and maybe learn something new about yourself.
+                The name <strong class="text-white font-semibold">Stop 214</strong> is a nickname for the Japanese
+                fast-food joint where we first had a discussion about starting a studio together after seeing a new
+                movie. This is considered the inception point for <strong class="text-white font-semibold">Stop
+                    214</strong>. We believe that <strong class="text-white font-semibold">Stop 214</strong> is a place
+                for you to sit down and reflect, and maybe learn something new about yourself.
             </p>
         </div>
 
-        <div class="w-full mb-8">
+        <div class="w-full mb-8 pl-4 sm:pl-8">
             <h2 class="text-3xl sm:text-4xl font-bold text-white text-center font-tech">Our Team</h2>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-            <div class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
-                <div class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl"></div>
-                <div class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full pl-4 sm:pl-8">
+            <div
+                class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl">
+                </div>
 
-                <div class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none"></div>
-                    <img src="resources/oliver.png" alt="Oliver Watkins" class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10" onerror="this.style.display='none';">
+                <div
+                    class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none">
+                    </div>
+                    <img src="resources/oliver.png" alt="Oliver Watkins"
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10"
+                        onerror="this.style.display='none';">
                     <div class="flex flex-col items-center justify-center w-full h-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">OW</span>
+                        <span
+                            class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">OW</span>
                     </div>
                 </div>
 
-                <h3 class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">Oliver Watkins</h3>
-                <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-6 font-tech">Co-Founder & Developer</p>
-                
-                <a href="https://www.linkedin.com/in/oliverwatkinsdev/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                    <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                    <span>Connect on LinkedIn</span>
-                </a>
+                <h3
+                    class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">
+                    Oliver Watkins</h3>
+                <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-2 font-tech">Co-Founder & Designer</p>
+                <a href="mailto:oliver@stop214.com"
+                    class="text-sm font-tech text-zinc-400 hover:text-white transition-colors mb-6">oliver@stop214.com</a>
+
+                <div class="flex flex-col gap-3 w-full">
+                    <a href="https://www.linkedin.com/in/oliverwatkinsdev/" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        <span>Connect on LinkedIn</span>
+                    </a>
+                    <a href="https://mediasaur.itch.io/" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <img src="https://www.svgrepo.com/show/341939/itch-io.svg" alt="Itch.io"
+                            class="h-5 w-5 brightness-0 invert opacity-80">
+                        <span>Visit Itch.io</span>
+                    </a>
+                </div>
             </div>
 
-            <div class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
-                <div class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl"></div>
-                <div class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl"></div>
+            <div
+                class="group/card relative rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 flex flex-col items-center text-center transition-all duration-500 card-glow overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 w-8 h-8 border-r border-t border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-tr-xl">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-8 h-8 border-l border-b border-zinc-800 group-hover/card:border-zinc-600 transition-colors duration-300 rounded-bl-xl">
+                </div>
 
-                <div class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none"></div>
-                    <img src="resources/daniel.jpeg" alt="Daniel Dewfall" class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10" onerror="this.style.display='none';">
+                <div
+                    class="relative w-32 h-32 rounded-2xl mb-5 overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover/card:border-zinc-600 transition-colors duration-300">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 z-20 pointer-events-none">
+                    </div>
+                    <img src="resources/daniel.jpeg" alt="Daniel Dewfall"
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-500 transform group-hover/card:scale-110 z-10"
+                        onerror="this.style.display='none';">
                     <div class="flex flex-col items-center justify-center w-full h-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-14 w-14 text-zinc-700 group-hover/card:text-white transition-all duration-500 transform group-hover/card:scale-110"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">DD</span>
+                        <span
+                            class="absolute bottom-1.5 text-[9px] text-zinc-600 tracking-widest uppercase font-tech pointer-events-none">DD</span>
                     </div>
                 </div>
 
-                <h3 class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">Daniel Dewfall</h3>
-                <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-6 font-tech">Co-Founder & Developer</p>
-                
-                <a href="https://www.linkedin.com/in/daniel-dewfall-5869a11a4/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
-                    <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                    <span>Connect on LinkedIn</span>
-                </a>
+                <h3
+                    class="text-xl font-bold text-white font-tech group-hover/card:text-white transition-colors duration-300">
+                    Daniel Dewfall</h3>
+                <p class="text-xs text-zinc-500 uppercase tracking-widest mt-1 mb-2 font-tech">Co-Founder & Designer</p>
+                <a href="mailto:daniel@stop214.com"
+                    class="text-sm font-tech text-zinc-400 hover:text-white transition-colors mb-6">daniel@stop214.com</a>
+
+                <div class="flex flex-col gap-3 w-full">
+                    <a href="https://www.linkedin.com/in/daniel-dewfall-5869a11a4/" target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        <span>Connect on LinkedIn</span>
+                    </a>
+                    <a href="https://www.artstation.com/danieldewfall" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center justify-center gap-2.5 w-full py-3 px-4 rounded-xl bg-zinc-900 border border-zinc-800 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 hover:border-zinc-700 transition-all duration-300">
+                        <img src="https://www.svgrepo.com/show/341618/artstation.svg" alt="ArtStation"
+                            class="h-5 w-5 brightness-0 invert opacity-80">
+                        <span>Visit ArtStation</span>
+                    </a>
+                </div>
             </div>
         </div>
 
-        <div class="w-full flex flex-col items-center mt-20 mb-4 relative z-20">
-            <a href="mailto:enquiries@stop214.com" class="inline-flex items-center justify-center py-4 px-8 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold text-lg hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-300 font-tech shadow-lg hover:shadow-zinc-700/20">
-                Got Questions? Email Us
-            </a>
-            <p class="mt-4 text-zinc-500 text-sm font-tech tracking-widest">enquiries@stop214.com</p>
+        <div class="w-full flex flex-col items-center mt-24 mb-4 relative z-20 pl-4 sm:pl-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white text-center font-tech mb-8">Got Questions? We Are All
+                Ears</h2>
+            <form action="https://formspree.io/f/mnjkyaba" method="POST" class="w-full max-w-lg flex flex-col gap-4">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input type="text" name="name" placeholder="Name" required
+                        class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-tech">
+                    <input type="email" name="email" placeholder="Email" required
+                        class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors font-tech">
+                </div>
+                <textarea name="message" placeholder="Message" rows="4" required
+                    class="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-300 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-colors resize-none font-tech"></textarea>
+                <button type="submit"
+                    class="w-full py-4 mt-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold text-lg hover:bg-zinc-800 hover:border-zinc-500 transition-all duration-300 font-tech shadow-lg hover:shadow-zinc-700/20">
+                    Send ✉️
+                </button>
+            </form>
+            <p class="mt-8 text-zinc-500 text-sm font-tech tracking-widest text-center">enquiries@stop214.com</p>
         </div>
 
     </main>
 
-    <footer class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 border-t border-zinc-900/60 flex justify-center items-center text-xs text-zinc-500 font-tech">
+    <footer
+        class="w-full max-w-5xl mx-auto px-6 py-12 relative z-10 border-t border-zinc-900/60 flex justify-center items-center text-xs text-zinc-500 font-tech">
         <p class="text-center">&copy; 2026 <strong>Stop 214</strong>. All rights reserved.</p>
     </footer>
 
@@ -176,6 +278,8 @@
         let particles = [];
         let mouse = { x: null, y: null, radius: 150 };
         let lastTime = 0;
+        let targetSmearY = 0;
+        let currentSmearY = 0;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -214,7 +318,19 @@
                     currentOpacity = this.baseOpacity;
                 }
 
-                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, currentOpacity)})`;
+                let dx = this.x - (canvas.width / 2);
+                let dy = this.y;
+                let normalizedX = dx / (canvas.width * 0.45);
+                let normalizedY = dy / (canvas.height * 1.5);
+                let distanceToLight = Math.sqrt(normalizedX * normalizedX + normalizedY * normalizedY);
+
+                let lightBoost = 0;
+                if (distanceToLight < 1) {
+                    let currentSpotlightOpacity = parseFloat(spotlight.style.opacity || 0.8);
+                    lightBoost = Math.pow((1 - distanceToLight), 2) * (currentSpotlightOpacity * 0.8);
+                }
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, currentOpacity + lightBoost))})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.closePath();
@@ -223,7 +339,7 @@
 
             update(dt) {
                 this.life += dt;
-                
+
                 if (this.life >= this.maxLife) {
                     this.reset();
                 }
@@ -232,7 +348,7 @@
                     let dx = this.x - mouse.x;
                     let dy = this.y - mouse.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-                    
+
                     if (distance < mouse.radius) {
                         let force = (mouse.radius - distance) / mouse.radius;
                         this.pushVx += (dx / distance) * force * 0.15;
@@ -261,16 +377,54 @@
             }
         }
 
+        function updateScrollEffects() {
+            const gleam = document.getElementById('header-gleam');
+            if (gleam) {
+                const opacity = Math.max(0, 1 - (window.scrollY / 400));
+                gleam.style.opacity = opacity.toString();
+            }
+
+            const track = document.getElementById('smear-track');
+            const aboutHeading = document.getElementById('about-heading');
+            const mainContent = document.getElementById('main-content');
+
+            if (track && aboutHeading && mainContent) {
+                const offset = aboutHeading.getBoundingClientRect().top - mainContent.getBoundingClientRect().top;
+                track.style.top = `${Math.max(0, offset + 6)}px`;
+
+                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollPercent = scrollHeight > 0 ? (window.scrollY / scrollHeight) : 0;
+                const maxY = track.offsetHeight - 128;
+                const rawY = scrollPercent * maxY;
+                targetSmearY = rawY;
+            }
+        }
+
         function animate(currentTime) {
             let dt = currentTime - lastTime;
             lastTime = currentTime;
-            if (dt > 100) dt = 16; 
+            if (dt > 100) dt = 16;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particles.length; i++) {
                 particles[i].draw();
                 particles[i].update(dt);
             }
+
+            currentSmearY += (targetSmearY - currentSmearY) * 0.1;
+            const smear = document.getElementById('scroll-smear');
+            const track = document.getElementById('smear-track');
+
+            if (smear && track) {
+                smear.style.transform = `translate(-50%, ${currentSmearY}px)`;
+
+                let maxY = track.offsetHeight - 128;
+                let peakPercent = (currentSmearY / Math.max(1, maxY)) * 100;
+                peakPercent = Math.max(0, Math.min(100, peakPercent));
+
+                smear.style.backgroundImage = `linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) ${peakPercent}%, rgba(255, 255, 255, 0) 100%)`;
+            }
+
             requestAnimationFrame(animate);
         }
 
@@ -291,6 +445,8 @@
             }
             setTimeout(flickerLight, Math.random() * 4000 + 1500);
         }
+
+        window.addEventListener('scroll', updateScrollEffects);
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.x;
@@ -314,8 +470,10 @@
             mouse.y = null;
         });
 
-        window.onload = function() {
+        window.onload = function () {
             resizeCanvas();
+            updateScrollEffects();
+            currentSmearY = targetSmearY;
             requestAnimationFrame((time) => {
                 lastTime = time;
                 animate(time);
@@ -323,7 +481,11 @@
             setTimeout(flickerLight, 2000);
         };
 
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            updateScrollEffects();
+        });
     </script>
 </body>
+
 </html>
