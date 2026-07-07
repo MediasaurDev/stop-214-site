@@ -1,5 +1,7 @@
 {
   "name": "stop-214-site",
-  "main": "src/index.html", // Change this to your actual entry point file (e.g., index.ts, worker.js)
-  "compatibility_date": "2026-07-07" 
+  "compatibility_date": "2026-07-07",
+  "assets": {
+    "directory": "./src"
+  }
 }
