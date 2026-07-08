@@ -16,7 +16,33 @@ body {
 .card-glow:hover {
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.45);
-    transform: translateY(-4px);
+    transform: scale(1.02);
+}
+
+@keyframes shakeError {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-6px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(6px);
+    }
+}
+
+.invalid-code {
+    animation: shakeError 0.4s cubic-bezier(.36, .07, .19, .97) both;
+    border-color: #ef4444 !important;
+    /* Tailwind red-500 */
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important;
+    color: #ef4444 !important;
 }
 
 .spotlight-wrapper {

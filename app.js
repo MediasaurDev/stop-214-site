@@ -33,15 +33,13 @@ class Particle {
     }
 
     draw() {
-        let currentOpacity = 0;
+        let fadeFactor = 1;
         const fadeTime = 800;
 
         if (this.life < fadeTime) {
-            currentOpacity = (this.life / fadeTime) * this.baseOpacity;
+            fadeFactor = this.life / fadeTime;
         } else if (this.life > this.maxLife - fadeTime) {
-            currentOpacity = ((this.maxLife - this.life) / fadeTime) * this.baseOpacity;
-        } else {
-            currentOpacity = this.baseOpacity;
+            fadeFactor = (this.maxLife - this.life) / fadeTime;
         }
 
         let dx = this.x - (canvas.width / 2);
@@ -56,7 +54,9 @@ class Particle {
             lightBoost = Math.pow((1 - distanceToLight), 2) * (currentSpotlightOpacity * 0.8);
         }
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, currentOpacity + lightBoost))})`;
+        let finalOpacity = (this.baseOpacity + lightBoost) * fadeFactor;
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, Math.min(1, finalOpacity))})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.closePath();
@@ -209,4 +209,80 @@ window.addEventListener('load', updateScrollEffects);
 window.addEventListener('resize', () => {
     resizeCanvas();
     updateScrollEffects();
+});
+
+// --- Easter Egg Menu Logic ---
+const burgerBtn = document.getElementById('burger-btn');
+const dropdownMenu = document.getElementById('dropdown-menu');
+const secretCodeBtn = document.getElementById('secret-code-btn');
+const secretModal = document.getElementById('secret-modal');
+const secretBackdrop = document.getElementById('secret-backdrop');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const secretForm = document.getElementById('secret-form');
+const secretInput = document.getElementById('secret-input');
+const modalContent = document.getElementById('secret-modal-content');
+
+let isMenuOpen = false;
+
+// Toggle burger and dropdown
+burgerBtn.addEventListener('click', () => {
+    isMenuOpen = !isMenuOpen;
+    const spans = burgerBtn.querySelectorAll('span');
+
+    if (isMenuOpen) {
+        spans[0].style.transform = 'translateY(8px) rotate(45deg)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'translateY(-8px) rotate(-45deg)';
+        dropdownMenu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+    } else {
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+        dropdownMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+    }
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (isMenuOpen && !burgerBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        burgerBtn.click();
+    }
+});
+
+// Open/Close Modal
+function openModal() {
+    secretModal.classList.remove('opacity-0', 'pointer-events-none');
+    modalContent.classList.remove('scale-95');
+    secretInput.value = '';
+    setTimeout(() => secretInput.focus(), 100);
+    if (isMenuOpen) burgerBtn.click();
+}
+
+function closeModal() {
+    secretModal.classList.add('opacity-0', 'pointer-events-none');
+    modalContent.classList.add('scale-95');
+}
+
+secretCodeBtn.addEventListener('click', openModal);
+closeModalBtn.addEventListener('click', closeModal);
+secretBackdrop.addEventListener('click', closeModal);
+
+// Process the secret code
+secretForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const code = secretInput.value.trim().toLowerCase();
+
+    if (code === 'dinnerbone') {
+        document.body.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        document.body.style.transform = 'rotate(180deg)';
+        closeModal();
+    } else if (code !== '') {
+        // Trigger red glow and shake for invalid codes
+        secretInput.classList.add('invalid-code');
+
+        // Remove the class after the animation finishes so it can be triggered again
+        setTimeout(() => {
+            secretInput.classList.remove('invalid-code');
+        }, 400);
+    }
 });
