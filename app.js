@@ -6,6 +6,10 @@ let mouse = { x: null, y: null, radius: 150 };
 let lastTime = 0;
 let targetSmearY = 0;
 let currentSmearY = 0;
+let isBlizzard = false;
+let isChristmas = false;
+let lastScrollTime = Date.now();
+let snowAccumulation = 0;
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -85,8 +89,19 @@ class Particle {
         this.pushVx *= 0.96;
         this.pushVy *= 0.96;
 
-        this.x += this.vx + this.pushVx;
-        this.y += this.vy + this.pushVy;
+        let currentVx = this.vx;
+        let currentVy = this.vy;
+
+        if (isBlizzard) {
+            currentVx = (Math.random() - 0.5) * 15 + 8;
+            currentVy = (Math.random() - 0.5) * 15;
+        } else if (isChristmas) {
+            currentVx = Math.sin(this.life / 300) * 0.8;
+            currentVy = 1.5 + (this.size * 0.5);
+        }
+
+        this.x += currentVx + this.pushVx;
+        this.y += currentVy + this.pushVy;
 
         if (this.x < 0) this.x = canvas.width;
         if (this.x > canvas.width) this.x = 0;
@@ -124,7 +139,27 @@ function animate(currentTime) {
     lastTime = currentTime;
     if (dt > 100) dt = 16;
 
+    if (isChristmas && (Date.now() - lastScrollTime) > 2500) {
+        snowAccumulation = Math.min(100, snowAccumulation + (dt * 0.02));
+    } else {
+        snowAccumulation = Math.max(0, snowAccumulation - (dt * 0.8));
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (isChristmas && snowAccumulation > 0) {
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, snowAccumulation / 20)})`;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        for (let x = 0; x <= canvas.width + 50; x += 50) {
+            let yOffset = Math.sin(x * 0.01 + currentTime * 0.001) * 8;
+            ctx.lineTo(x, canvas.height - snowAccumulation + yOffset);
+        }
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.fill();
+    }
+
     for (let i = 0; i < particles.length; i++) {
         particles[i].draw();
         particles[i].update(dt);
@@ -165,11 +200,14 @@ function flickerLight() {
     setTimeout(flickerLight, Math.random() * 2000 + 800);
 }
 
-window.addEventListener('scroll', updateScrollEffects);
+window.addEventListener('scroll', () => {
+    updateScrollEffects();
+    lastScrollTime = Date.now();
+});
 
 window.addEventListener('mousemove', (e) => {
-    mouse.x = e.x;
-    mouse.y = e.y;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
 });
 
 window.addEventListener('mouseout', () => {
@@ -200,10 +238,8 @@ function init() {
     setTimeout(flickerLight, 2000);
 }
 
-// 1. Fire the app immediately. The browser already guarantees styles.css is applied before reaching this line.
 init();
 
-// 2. Just update scroll math in case the profile pictures load a second later and push the text down.
 window.addEventListener('load', updateScrollEffects);
 
 window.addEventListener('resize', () => {
@@ -211,7 +247,6 @@ window.addEventListener('resize', () => {
     updateScrollEffects();
 });
 
-// --- Easter Egg Menu Logic ---
 const burgerBtn = document.getElementById('burger-btn');
 const dropdownMenu = document.getElementById('dropdown-menu');
 const secretCodeBtn = document.getElementById('secret-code-btn');
@@ -224,7 +259,6 @@ const modalContent = document.getElementById('secret-modal-content');
 
 let isMenuOpen = false;
 
-// Toggle burger and dropdown
 burgerBtn.addEventListener('click', () => {
     isMenuOpen = !isMenuOpen;
     const spans = burgerBtn.querySelectorAll('span');
@@ -242,14 +276,12 @@ burgerBtn.addEventListener('click', () => {
     }
 });
 
-// Close dropdown when clicking outside
 document.addEventListener('click', (e) => {
     if (isMenuOpen && !burgerBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
         burgerBtn.click();
     }
 });
 
-// Open/Close Modal
 function openModal() {
     secretModal.classList.remove('opacity-0', 'pointer-events-none');
     modalContent.classList.remove('scale-95');
@@ -267,22 +299,36 @@ secretCodeBtn.addEventListener('click', openModal);
 closeModalBtn.addEventListener('click', closeModal);
 secretBackdrop.addEventListener('click', closeModal);
 
-// Process the secret code
 secretForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const code = secretInput.value.trim().toLowerCase();
+    let validCode = true;
+    const hat = document.getElementById('santa-hat');
 
     if (code === 'dinnerbone') {
         document.body.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        document.body.style.transform = 'rotate(180deg)';
-        closeModal();
+        document.body.style.transform = document.body.style.transform === 'rotate(180deg)' ? 'none' : 'rotate(180deg)';
+        if (hat) hat.classList.add('opacity-0');
+    } else if (code === 'blizzard') {
+        isBlizzard = true;
+        isChristmas = false;
+        if (hat) hat.classList.add('opacity-0');
+    } else if (code === 'rainbow') {
+        document.body.classList.add('rainbow-mode');
+        if (hat) hat.classList.add('opacity-0');
+    } else if (code === 'christmas') {
+        isChristmas = true;
+        isBlizzard = false;
+        if (hat) hat.classList.remove('opacity-0');
     } else if (code !== '') {
-        // Trigger red glow and shake for invalid codes
+        validCode = false;
         secretInput.classList.add('invalid-code');
-
-        // Remove the class after the animation finishes so it can be triggered again
         setTimeout(() => {
             secretInput.classList.remove('invalid-code');
         }, 400);
+    }
+
+    if (validCode && code !== '') {
+        closeModal();
     }
 });

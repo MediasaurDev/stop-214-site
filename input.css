@@ -108,3 +108,23 @@ html {
         visibility: hidden;
     }
 }
+
+@keyframes rainbowCycle {
+    0% { color: #ff6b6b; }
+    20% { color: #feca57; }
+    40% { color: #48dbfb; }
+    60% { color: #1dd1a1; }
+    80% { color: #ff9ff3; }
+    100% { color: #ff6b6b; }
+}
+
+.rainbow-mode h1,
+.rainbow-mode h2,
+.rainbow-mode h3,
+.rainbow-mode p,
+.rainbow-mode a,
+.rainbow-mode span,
+.rainbow-mode strong,
+.rainbow-mode button {
+    animation: rainbowCycle 3s linear infinite !important;
+}

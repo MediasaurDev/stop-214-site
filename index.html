@@ -23,17 +23,22 @@
 
     <!-- Fixed Burger Menu -->
     <div class="fixed top-6 right-6 z-50 flex flex-col items-end">
-        <button id="burger-btn" class="w-12 h-12 flex flex-col items-center justify-center gap-1.5 rounded-xl bg-zinc-950/80 backdrop-blur-md border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-500 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-300 group">
+        <button id="burger-btn"
+            class="w-12 h-12 flex flex-col items-center justify-center gap-1.5 rounded-xl bg-zinc-950/80 backdrop-blur-md border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-500 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-300 group">
             <span class="w-5 h-0.5 bg-current rounded-full transition-transform duration-300 origin-center"></span>
             <span class="w-5 h-0.5 bg-current rounded-full transition-opacity duration-300"></span>
             <span class="w-5 h-0.5 bg-current rounded-full transition-transform duration-300 origin-center"></span>
         </button>
 
-        <div id="dropdown-menu" class="mt-4 w-48 bg-zinc-950/90 backdrop-blur-md border border-zinc-800 rounded-xl overflow-hidden shadow-2xl opacity-0 pointer-events-none -translate-y-2 transition-all duration-300 origin-top-right">
-            <button id="secret-code-btn" class="w-full text-left px-4 py-3 text-sm font-tech text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors flex items-center gap-2">
+        <div id="dropdown-menu"
+            class="mt-4 w-48 bg-zinc-950/90 backdrop-blur-md border border-zinc-800 rounded-xl overflow-hidden shadow-2xl opacity-0 pointer-events-none -translate-y-2 transition-all duration-300 origin-top-right">
+            <button id="secret-code-btn"
+                class="w-full text-left px-4 py-3 text-sm font-tech text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors flex items-center gap-2">
                 <!-- New Padlock Icon -->
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                    </path>
                 </svg>
                 Secret Code
             </button>
@@ -41,21 +46,30 @@
     </div>
 
     <!-- Secret Code Modal -->
-    <div id="secret-modal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+    <div id="secret-modal"
+        class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
         <!-- Backdrop -->
         <div id="secret-backdrop" class="absolute inset-0 bg-[#050505]/70 backdrop-blur-sm"></div>
-        
+
         <!-- Modal Content -->
-        <div class="relative bg-zinc-950 border border-zinc-800 rounded-2xl p-6 sm:p-8 w-full max-w-sm shadow-2xl shadow-zinc-900/50 transform scale-95 transition-transform duration-300" id="secret-modal-content">
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <div class="relative bg-zinc-950 border border-zinc-800 rounded-2xl p-6 sm:p-8 w-full max-w-sm shadow-2xl shadow-zinc-900/50 transform scale-95 transition-transform duration-300"
+            id="secret-modal-content">
+            <button id="close-modal-btn"
+                class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
             </button>
             <h3 class="text-xl font-bold text-white font-tech mb-2">Access Code</h3>
             <p class="text-xs text-zinc-500 font-tech mb-6 tracking-widest uppercase">Enter sequence below</p>
-            
+
             <form id="secret-form" class="flex flex-col gap-4">
-                <input type="text" id="secret-input" placeholder="code..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-all duration-300 font-tech text-center tracking-widest uppercase" autocomplete="off">
-                <button type="submit" class="w-full py-3 rounded-xl bg-zinc-100 text-black font-bold text-sm hover:bg-zinc-300 transition-colors font-tech">
+                <input type="text" id="secret-input" placeholder="code..."
+                    class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500 transition-all duration-300 font-tech text-center tracking-widest uppercase"
+                    autocomplete="off">
+                <button type="submit"
+                    class="w-full py-3 rounded-xl bg-zinc-100 text-black font-bold text-sm hover:bg-zinc-300 transition-colors font-tech">
                     Enter
                 </button>
             </form>
@@ -83,7 +97,9 @@
                 <img src="resources/logo.png" alt="Stop 214 Logo"
                     class="w-24 h-24 sm:w-32 sm:h-32 -mt-6 mb-2 object-contain">
                 <h1
-                    class="text-6xl sm:text-7xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none text-center font-tech">
+                    class="relative text-6xl sm:text-7xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none text-center font-tech">
+                    <img id="santa-hat" src="https://www.svgrepo.com/show/206754/winter-hat-santa-claus.svg" alt=""
+                        class="absolute -top-8 -right-4 sm:-top-5 sm:-right-5 w-16 h-16 sm:w-16 sm:h-16 opacity-0 transition-opacity duration-500 pointer-events-none transform rotate-12 z-50 drop-shadow-lg">
                     <span class="font-light">STOP</span> 214
                 </h1>
                 <div
